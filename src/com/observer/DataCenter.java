@@ -6,7 +6,7 @@ import java.util.List;
 public class DataCenter implements Subject{
     private List<Observer> observerList;
     private double temp, humidity, pressure;
-    private boolean changed;
+    private boolean changed = false;
 
     public DataCenter() {
         this.observerList = new ArrayList<>();
@@ -17,13 +17,17 @@ public class DataCenter implements Subject{
         humidity = h;
         pressure = p;
 
-        changed = true;
-        notifyObserves();
+        measurementChanged();
     }
 
     @Override
     public void registredObserver(Observer o) {
         observerList.add(o);
+    }
+
+    public void measurementChanged(){
+        setChanged();
+        notifyObserves();
     }
 
     @Override
@@ -36,11 +40,16 @@ public class DataCenter implements Subject{
     @Override
     public void notifyObserves() {
         if (changed){
-            for (int i = 0; i < observerList.size(); i++) {
-                Observer observer = observerList.get(i);
-
+            for (Observer observer : observerList) {
                 observer.Update(temp, humidity, pressure);
             }
+            changed = false;
         }
+    }
+
+    private void setChanged() {
+        if (changed){
+            changed = false;
+        } else changed = true;
     }
 }
