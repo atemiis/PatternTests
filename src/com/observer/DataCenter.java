@@ -16,6 +16,7 @@ public class DataCenter implements Subject{
         temp = t;
         humidity = h;
         pressure = p;
+
         changed = true;
         notifyObserves();
     }
